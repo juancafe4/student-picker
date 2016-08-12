@@ -2,21 +2,97 @@ import React from 'react'
 
 import ReactDOM from 'react-dom'
 import uuid from 'uuid'
+import _ from 'lodash'
 
 const RandomList = React.createClass({
+  getInitialState() {
+    return {
+      randStudent: ""
+    }
+  },
+  getRandStudent(e) {
+    console.log('click')
+    let randIndex = Math.floor(Math.random() * this.props.students.length)
+    let student = this.props.students[randIndex]
+    this.setState({randStudent: student.name})
+  },
+  render() {
+    
+    
+    return(
+      
+      <div className= "inner">
+        <button onClick={this.getRandStudent}className="btn btn-primary">Get Random List</button>
+        <h3>{this.state.randStudent}</h3>
+      </div>
+    )
+  }
+})
+
+const TeamList = React.createClass({
+  getInitialState() {
+    return {
+      numberOfTeams: 0,
+      teams: []
+    }
+  },
+  buildTeam(e) {
+    let num = this.state.numberOfTeams;
+    if (!(this.props.students.length % num)) {
+      let shuffle =  _.shuffle(this.props.students);
+      let chunk = _.chunk(shuffle, num);
+      console.log('chunk', chunk)
+
+
+      let teams = chunk.map((val, index) => {
+        let ul = <ul className="list-groups" key={index + 1}>
+        <h3>Team {index + 1} </h3>
+          {
+            val.map( student => {
+              return <li className="list-group-item" key={student.id}>{student.name}</li>
+            })
+          }
+        </ul>
+        return ul;
+      });
+
+      this.setState({teams: teams})
+    } 
+    else
+      alert('Uneven teams')
+  },
+  render() {
+
+    return (
+      
+      <div className="inner">
+        <button onClick={this.buildTeam} className="btn btn-primary">Get Team</button>
+        <input onChange={ e => this.setState({numberOfTeams: e.target.value}) } type="number" value={this.state.numberOfTeams} />
+        {this.state.teams}
+      </div>
+    )
+  }
+})
 const StudenstList = React.createClass({
   render() {
     return (
-      <ul className="list-groups">
-        {this.props.students}
-      </ul>
+      <div className= "inner">
+        <ul className=" list-groups">
+          {this.props.students}
+        </ul>
+      </div>
     )
   }
 })
 const Root = React.createClass({
   getInitialState() {
+    try {
+      var students = JSON.parse(localStorage.students)
+    } catch(e) {
+      var students = []
+    }
     return {
-      students: [],
+      students: students,
       studentName: ""
     }
   },
@@ -30,8 +106,11 @@ const Root = React.createClass({
       this.setState({students: newStudents, studentName: ''});
     }
   },
+  componentDidUpdate() {
+    localStorage.students = JSON.stringify(this.state.students)
+  },
   render() {
-    let lis = this.state.students.map( student =>  <li key={student.id}>{student.name}</li>);
+    let lis = this.state.students.map( student =>  <li className="list-group-item" key={student.id}>{student.name}</li>);
 
     return (
       <div className="container">
@@ -47,13 +126,13 @@ const Root = React.createClass({
         </div>
         
         <div className="row content">
-          <div className="col-xs-4">
-            <StudenstList students={lis}/>
+          <div  className="col-xs-4">
+            <RandomList students={this.state.students} />
           </div>
           <div className="col-xs-4">
-            <StudenstList students={lis}/>
+            <TeamList students={this.state.students}/>
           </div>
-          <div className="col-xs-4">
+          <div className="col-xs-3">
             <StudenstList students={lis}/>
           </div>
         </div>

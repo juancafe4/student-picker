@@ -7,6 +7,23 @@ input {
 }
 
 .content {
+
   margin-top:25px;
-  border-top: 2px solid blue;
+  
+}
+
+.inner {
+  margin-top: 25px;
+  border: 2px solid #000;  
+  height: 500px;
+}
+
+.inner > input {
+  margin-top: 10px;
+  margin-left: 25px;
+}
+
+.inner > button {
+  margin-top: 10px;
+  margin-left: 25px;
 }
