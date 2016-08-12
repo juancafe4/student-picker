@@ -17,15 +17,15 @@ const RandomList = React.createClass({
     this.setState({randStudent: student.name})
   },
   render() {
-    
-    
+
+
     return(
-      
+
       <div className= "inner">
-        <button onClick={this.getRandStudent}className="btn btn-primary">Get Random List</button>
-        <h3>{this.state.randStudent}</h3>
+      <button onClick={this.getRandStudent}className="btn btn-primary">Get Random List</button>
+      <h3>{this.state.randStudent}</h3>
       </div>
-    )
+      )
   }
 })
 
@@ -47,11 +47,11 @@ const TeamList = React.createClass({
       let teams = chunk.map((val, index) => {
         let ul = <ul className="list-groups" key={index + 1}>
         <h3>Team {index + 1} </h3>
-          {
-            val.map( student => {
-              return <li className="list-group-item" key={student.id}>{student.name}</li>
-            })
-          }
+        {
+          val.map( student => {
+            return <li className="list-group-item" key={student.id}>{student.name}</li>
+          })
+        }
         </ul>
         return ul;
       });
@@ -64,24 +64,24 @@ const TeamList = React.createClass({
   render() {
 
     return (
-      
+
       <div className="inner">
-        <button onClick={this.buildTeam} className="btn btn-primary">Get Team</button>
-        <input onChange={ e => this.setState({numberOfTeams: e.target.value}) } type="number" value={this.state.numberOfTeams} />
-        {this.state.teams}
+      <button onClick={this.buildTeam} className="btn btn-primary">Get Team</button>
+      <input onChange={ e => this.setState({numberOfTeams: e.target.value}) } type="number" value={this.state.numberOfTeams} />
+      {this.state.teams}
       </div>
-    )
+      )
   }
 })
 const StudenstList = React.createClass({
   render() {
     return (
       <div className= "inner">
-        <ul className=" list-groups">
-          {this.props.students}
-        </ul>
+      <ul className=" list-groups">
+      {this.props.students}
+      </ul>
       </div>
-    )
+      )
   }
 })
 const Root = React.createClass({
@@ -106,42 +106,49 @@ const Root = React.createClass({
       this.setState({students: newStudents, studentName: ''});
     }
   },
+  remove(id) {
+    console.log('students', this.state.students)
+    let students = this.state.students.filter(student => {
+      return student.id !== id
+    })
+    this.setState({students: this.students})
+  },
   componentDidUpdate() {
     localStorage.students = JSON.stringify(this.state.students)
   },
   render() {
-    let lis = this.state.students.map( student =>  <li className="list-group-item" key={student.id}>{student.name}</li>);
+    let lis = this.state.students.map(  student =>  <li onDoubleClick={this.remove.bind(null, student.id)} className="list-group-item" key={student.id}>{student.name}</li>);
 
     return (
       <div className="container">
 
-        <div className="row">
-          <div className="col-xs-6">
-            <h1>Student Picker</h1>
-          </div>
-          <div className="col-xs-6 add">
-            <button onClick={this.addStudent} className="center btn btn-primary btn-md">+</button>
-            <input onChange={ e => this.setState({studentName: e.target.value}) } type="text" value={this.state.studentName}/>
-          </div>
-        </div>
-        
-        <div className="row content">
-          <div  className="col-xs-4">
-            <RandomList students={this.state.students} />
-          </div>
-          <div className="col-xs-4">
-            <TeamList students={this.state.students}/>
-          </div>
-          <div className="col-xs-3">
-            <StudenstList students={lis}/>
-          </div>
-        </div>
+      <div className="row">
+      <div className="col-xs-6">
+      <h1>Student Picker</h1>
       </div>
-    )
+      <div className="col-xs-6 add">
+      <button onClick={this.addStudent} className="center btn btn-primary btn-md">+</button>
+      <input onChange={ e => this.setState({studentName: e.target.value}) } type="text" value={this.state.studentName}/>
+      </div>
+      </div>
+
+      <div className="row content">
+      <div  className="col-xs-4">
+      <RandomList students={this.state.students} />
+      </div>
+      <div className="col-xs-4">
+      <TeamList students={this.state.students}/>
+      </div>
+      <div className="col-xs-3">
+      <StudenstList students={lis}/>
+      </div>
+      </div>
+      </div>
+      )
   }
 })
 
- ReactDOM.render(
+ReactDOM.render(
   <Root />,
   document.getElementById('root')
-)
+  )

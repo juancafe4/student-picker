@@ -191,6 +191,13 @@
 	      this.setState({ students: newStudents, studentName: '' });
 	    }
 	  },
+	  remove: function remove(id) {
+	    console.log('students', this.state.students);
+	    var students = this.state.students.filter(function (student) {
+	      return student.id !== id;
+	    });
+	    this.setState({ students: this.students });
+	  },
 	  componentDidUpdate: function componentDidUpdate() {
 	    localStorage.students = JSON.stringify(this.state.students);
 	  },
@@ -200,7 +207,7 @@
 	    var lis = this.state.students.map(function (student) {
 	      return _react2.default.createElement(
 	        'li',
-	        { className: 'list-group-item', key: student.id },
+	        { onDoubleClick: _this2.remove.bind(null, student.id), className: 'list-group-item', key: student.id },
 	        student.name
 	      );
 	    });
