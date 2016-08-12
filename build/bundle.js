@@ -107,33 +107,43 @@
 	  buildTeam: function buildTeam(e) {
 	    var num = this.state.numberOfTeams;
 	    if (!(this.props.students.length % num)) {
+	      //Sort the array
 	      var shuffle = _lodash2.default.shuffle(this.props.students);
-	      var chunk = _lodash2.default.chunk(shuffle, num);
-	      console.log('chunk', chunk);
+	      //Divide it by chuncks
+	      var tm = _lodash2.default.chunk(shuffle, num);
+	      // console.log('chunk', chunk)
 
-	      var teams = chunk.map(function (val, index) {
-	        var ul = _react2.default.createElement(
+
+	      // teams = teams.map((team, index) => <ul className="list-groups" key={index + 1}>
+	      //   <h3>Team {index + 1} </h3>
+	      //   {
+	      //     team.map(s =><li className="list-group-item" key={s.id}>{s.name}</li>)
+	      //   }
+	      //   </ul>
+	      // );
+
+	      //Minifued
+	      tm = tm.map(function (t, i) {
+	        return _react2.default.createElement(
 	          'ul',
-	          { className: 'list-groups', key: index + 1 },
+	          { className: 'list-groups', key: i + 1 },
 	          _react2.default.createElement(
 	            'h3',
 	            null,
 	            'Team ',
-	            index + 1,
-	            ' '
+	            i + 1
 	          ),
-	          val.map(function (student) {
+	          t.map(function (s) {
 	            return _react2.default.createElement(
 	              'li',
-	              { className: 'list-group-item', key: student.id },
-	              student.name
+	              { className: 'list-group-item', key: s.id },
+	              s.name
 	            );
 	          })
 	        );
-	        return ul;
 	      });
 
-	      this.setState({ teams: teams });
+	      this.setState({ teams: tm });
 	    } else alert('Uneven teams');
 	  },
 	  render: function render() {

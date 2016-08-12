@@ -2,7 +2,7 @@ import React from 'react'
 
 import ReactDOM from 'react-dom'
 import uuid from 'uuid'
-import _ from 'lodash'
+import _ from 'lodash';
 
 const RandomList = React.createClass({
   getInitialState() {
@@ -39,24 +39,25 @@ const TeamList = React.createClass({
   buildTeam(e) {
     let num = this.state.numberOfTeams;
     if (!(this.props.students.length % num)) {
+      //Sort the array
       let shuffle =  _.shuffle(this.props.students);
-      let chunk = _.chunk(shuffle, num);
-      console.log('chunk', chunk)
+      //Divide it by chuncks
+      let tm = _.chunk(shuffle, num);
+      // console.log('chunk', chunk)
 
 
-      let teams = chunk.map((val, index) => {
-        let ul = <ul className="list-groups" key={index + 1}>
-        <h3>Team {index + 1} </h3>
-        {
-          val.map( student => {
-            return <li className="list-group-item" key={student.id}>{student.name}</li>
-          })
-        }
-        </ul>
-        return ul;
-      });
+      // teams = teams.map((team, index) => <ul className="list-groups" key={index + 1}>
+      //   <h3>Team {index + 1} </h3>
+      //   {
+      //     team.map(s =><li className="list-group-item" key={s.id}>{s.name}</li>)
+      //   }
+      //   </ul>
+      // );
 
-      this.setState({teams: teams})
+      //Minifued
+      tm=tm.map((t,i)=><ul className="list-groups"key={i+1}><h3>Team {i+1}</h3>{t.map(s=><li className="list-group-item"key={s.id}>{s.name}</li>)}</ul>);
+
+      this.setState({teams: tm})
     } 
     else
       alert('Uneven teams')
