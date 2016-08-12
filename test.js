@@ -1,0 +1,1 @@
+Array(10).fill((Array(10).fill('*')).fill('*'))

@@ -193,12 +193,13 @@
 	  },
 	  addStudent: function addStudent(e) {
 	    if (this.state.studentName) {
-	      var newStudents = this.state.students.concat({
-	        name: this.state.studentName,
-	        id: _uuid2.default.v4()
+
+	      var newStudents = this.state.studentName.split(/[,\s]+/g);
+	      newStudents = newStudents.map(function (s) {
+	        return { name: s, id: _uuid2.default.v4() };
 	      });
 
-	      this.setState({ students: newStudents, studentName: '' });
+	      this.setState({ students: this.state.students.concat(newStudents), studentName: '' });
 	    }
 	  },
 	  remove: function remove(id) {

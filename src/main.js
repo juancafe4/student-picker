@@ -99,12 +99,14 @@ const Root = React.createClass({
   },
   addStudent(e) {
     if(this.state.studentName) {
-      let newStudents = this.state.students.concat({
-        name: this.state.studentName,
-        id: uuid.v4()
-      })
 
-      this.setState({students: newStudents, studentName: ''});
+      let newStudents = this.state.studentName.split(/[,\s]+/g)
+      newStudents = newStudents.map(s => {
+       return  {name: s, id: uuid.v4()}
+      
+      });
+
+      this.setState({students: this.state.students.concat(newStudents), studentName: ''});
     }
   },
   remove(id) {
